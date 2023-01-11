@@ -1,0 +1,42 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Renew: {{ book_instance.book.title }}</h1>
+    <p>Borrower: {{ book_instance.borrower }}</p>
+    <p {% if book_instance.is_overdue %} class="text-danger"{% endif %}>Due date: {{ book_instance.due_back }}</p>
+
+    <!-- 
+        action: the (url) location where the form is to be submitted (so this case form data will be posted back to the current url)
+        method: HTTP request (i.e POST, GET)
+    -->
+    <form action="" method="post">
+        <!-- 
+            Token added as part of django's cross-site forgery protection 
+            Should be added to every django template that uses a POST to submit data. It reduces the chance of forms being hijacked by malicious users
+        -->
+        {% csrf_token %}
+        <table>
+            <!-- 
+                Automatic rendering of all fields of form as rows in a table.
+                With selected options or default
+            -->
+            {{ form.as_table }}
+            <!-- Could also render each field as:
+                    a list item (using {{ form.as_ul }}) 
+                    a paragraph (using {{ forms.as_p }})
+                
+                Or can have full control with dot notation. E.g.
+                    {{ form.renewal_date }} - the whole field
+                    {{ form.renewal_date.errors }}: The list of errors.
+                    {{ form.renewal_date.id_for_label }}: The id of the label.
+                    {{ form.renewal_date.help_text }}: The field help text.
+
+            -->
+        </table>
+        <!-- 
+            input type: a submit button which the reads all other input elements and sends to handler 
+            input value: is just the name of the button
+        -->
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Author: {{ author }}</h1>
+    
+    <p><strong>Life span:</strong> {{ author.get_life_span }}</p> <!-- author detail link not yet defined -->
+    <p><strong>Summary:</strong> {{ book.summary }}</p>
+    <p><strong>Languages:</strong> {{ book.language }}</p>
+    <p><strong>Genres:</strong> {{ book.genre.all|join:", " }}</p>
+    
+    {% if perms.catalog.update_authors %}
+        <p><a href="{% url 'author-update' author.id %}">Update</a></p>
+        {# So cannot delete if instances remain #}
+        {% if not author.book_set.all %}
+            <p><a href="{% url 'author-delete' author.id %}">Delete</a></p>
+        {% endif %}
+
+    {% endif %}
+
+
+
+    <div style="margin-left:20px;margin-top:20px">
+        <h4>Books</h4>
+
+        <!--
+            Needed as we declare a forgein key (one-to-many) field only in the "many" side (i.e Instances side)
+            So, the book doesn't have any field to get the set of associated records (instances)
+            SO, Django constructs an appropriately named reverse lookup. 
+            The function is constructed by lower-casing the model name where the Fk was declared followed by _set
+                - E.g. bookinstance_set()
+        -->
+        <!--
+            NEED TO DEFINE AN ORDER (on class-based view or model)
+            Because 'paginator object' expects to see some ORDER BY executed on underlying DB
+            So need to pick from: 
+                1. Add ordering inclide class Meta of model
+                2. Add queryset attribute in custom class-based view, specifying an order_by()
+                3. Adding get_queryset method to your custom class-based view and also specify the order_by()
+
+        -->
+        <!--
+            Shoud sort by attribute with an index (on db) to avoid performance issues  
+        -->
+
+
+
+        <!--
+            Inside the template you should be able to use dot notation
+        -->
+        
+        <!-- Splitting each entry into book_obj, the book objects (also book.0), and the info tuple (also book.1) -->
+        {% for book_obj, book_info in books.items %}
+            <hr>
+            <p><strong><a href="{{ book_obj.get_absolute_url }}">{{ book_obj.title }}:</a></strong> {{ book_obj.display_genre }}</p>
+            <p>Copies available: {{ book_info.1 }}</p>
+            <p>
+                {{ book_obj.summary }}
+            </p>
+        {% endfor %}
+
+        <!-- {% for book in books.items %}
+            <hr>
+            <!- <p>{{ book }}</p> is the dict of books, key (book.0) is book object, value (book.1) is a tuple ->
+            <p><strong><a href="{{ book.0.get_absolute_url }}">{{ book.0.title }}:</a></strong> {{ book.0.display_genre }}</p>
+            <!- <p>{{ book.1.0 }}</p> querySet of instances. Not used atm -> 
+            <p>Copies available: {{ book.1.1 }}</p>
+            <p>
+                {{ book.0.summary }}
+            </p>
+        {% endfor %} -->
+        
+    </div>
+{% endblock %}

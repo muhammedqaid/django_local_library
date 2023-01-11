@@ -1,0 +1,52 @@
+
+'''
+    Django provides a test framework with a small hierarchy of classes that build on python's standard unittest library. 
+    Suitable for both: 
+        - unit testing
+        - integration testing
+    Can simulate requests, insert test data and inspect the app's output.
+    Also provides an API (LiveServerTestCase) and tools for using different testing frameworks, e.g. Selenium, to simulate a user interacting with a live browser
+
+    To write a test, derive from any of Django (or unittest) base classes:
+        SimpleTestCase
+        TransactionTestCase
+        TestCase
+        LiveServerTestCase
+    Then write separate methods to check that specific functionality works as expected
+    Tests use 'assert' methods to test that expressions result in True or False, or two values are equal
+    Tests methods are tun independently, with common setup/ and or tear-down behaviour 
+'''
+
+'''
+    Best class for most tests is django.test.TestCase
+    It creates a clean database before its tests are run, and runs every test function in its own transaction. 
+    Class also owns a test client that can be used to simulate a user interacting with the code at the view level
+
+    Is convenient but may result in tests being slower than needed
+    
+'''
+
+'''
+    Will discover tests under the current working directory in any file named "test*.py"
+'''
+
+# Shouldn't test things implemented by packages. Just things like: 
+#   text used for labels and size of the field allocated for the text 
+#   custom methods, e.g. get_absolute_url() and __str__()
+
+# Tests most easily run with python3 manage.py test
+    # All under pattern "test*.py"
+    # By default only reports on test failures, followed by summary
+
+# If error ValueError: Missing staticfiles manifest entry ..., may be because testing does not run collectstatic by default. Can try "python manage.py collectstatic"
+
+Options: 
+    --verbosity 2, [0,1,2,3]
+    -- parallel auto - independent tests on a multi processor machine
+    --debug-mode
+    --shuffle
+
+Run specific test by name: 
+    python3 manage.py test catalog.tests
+    python3 manage.py test catalog.tests.test_file.test_class.test_method
+

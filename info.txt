@@ -1,0 +1,43 @@
+Superuser - 
+    username: test-superuser
+    email: test-superuser@locallibrary.com
+    password: securepassword
+
+Code to create user programatically: 
+    from django.contrib.auth.models import User
+
+    # Create user and save to the database
+    user = User.objects.create_user('myusername', 'myemail@crazymail.com', 'mypassword')
+
+    # Update fields and then save again
+    user.first_name = 'Tyrone'
+    user.last_name = 'Citizen'
+    user.save()
+
+Testuser - 
+    username: test-user
+    password: securepassword
+
+Testlibrarian
+    username: test-librarian
+    password: securepassword
+
+
+
+Deployment
+- Key settings to change- debug and secret Key
+- manage.py check --deploy 
+- Deplying on Railway (as it is free and skills are transferrable) 
+- Railway   
+    - Web Apps each run in isolated and independent virtualised containers
+    - Need to set up environment appropriately, with django done with the following: 
+        - runtime.txt   = states the programming language and version to use
+        - requirements  = lists the python dependencies needed for the site, including django
+        - procfile      = a list of processes to be executed to start the web application 
+                            For django this is usuallay a Gunicorn web aplication server (with a '.wsgi ' script)
+        - wsgi.py       = WSHI configuration to call our Django application in the Railway environment
+
+    - Interact with it through site and CLI, which allows you to associate with a local Github repo ect. 
+        - Useful feature allows you to use CLI to run local project with same environment vars as the live project 
+    - Need to put into a git repository -> add the setup files -> integrate with a database add-on -> make changes to properly handle static files
+                        

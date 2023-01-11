@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Book List</h1>
+    <!-- Check if book list has been defined and is not empty-->
+    <!-- Could have checked if {% empty% }, to define action if book list is empty-->
+    <!-- Can also do elif-->
+    {% if book_list %}
+    <ul>
+        <!-- Simple for each template tag-->
+        <!-- ALso have forloop.last ? -->
+        {% for book in book_list %}
+        <li>
+            <!-- Calling function in model from here (template), provided the function requires no arguments (no way to pass them). Be careful of side effects-->
+            <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> ({{book.author}})
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>There are no books in the library.</p>
+    {% endif %}
+{% endblock %}
